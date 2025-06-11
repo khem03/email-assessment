@@ -1,6 +1,6 @@
 defaults:
   - scope:
-      path: ""
+      path: "index.md"
       type: ""
     values:
-      layout: index
+      layout: ""
