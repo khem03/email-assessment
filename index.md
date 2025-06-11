@@ -4,7 +4,7 @@
 
 ## About
 
-The prupose of this project is to host static pages for SPOT the differences in images
+The prupose of this project is to host static pages to SPOT the differences in images
 
 ## Features
 
