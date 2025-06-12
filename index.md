@@ -17,7 +17,7 @@
 - Email Proof 1 Mobile: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](EmailProof1Mobile.html)
 
   
-## Practical Exercise 2 (SPOT DIFFERENCES)
+## Practical Exercise 2 (SPOT IMAGES DIFFERENCES)
 
 - Image 1: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test1.html)
 - Image 2: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test2.html)
