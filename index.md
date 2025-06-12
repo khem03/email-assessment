@@ -11,7 +11,7 @@
 - Email Proof 4: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof4.html)
 
 
-## Creatives For Exercise 1
+## Creatives For Practical Exercise 1
 
 - Email Proof 1 Desktop: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](EmailProof1Desktop.html)
 - Email Proof 1 Mobile: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](EmailProof1Mobile.html)
