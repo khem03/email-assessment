@@ -2,9 +2,6 @@
 
 ![Project Logo](./rapp.jpg)
 
-## About
-
-The prupose of this project is to host static pages to SPOT the differences in images
 
 ## Practical Exercise 1 (EMAIL TESTING)
 
@@ -12,6 +9,13 @@ The prupose of this project is to host static pages to SPOT the differences in i
 - Email Proof 2: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof2.html)
 - Email Proof 3: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof3.html)
 - Email Proof 4: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof4.html)
+
+
+## Creatives For Exercise 1
+
+- Email Proof 1 Desktop: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](EmailProof1Desktop.html)
+- Email Proof 2 Mobile: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](EmailProof1Mobile.html)
+
   
 ## Practical Exercise 2 (SPOT DIFFERENCES)
 
