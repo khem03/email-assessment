@@ -25,7 +25,7 @@
 - Image 4: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test4.html)
 
 
-## Checklist
+## Checklist For Practical Exercise 1
 
 - Email Testing Checklist: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](checklist.html)
 - Write Checklist Exercise: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](writechecklist.html)
