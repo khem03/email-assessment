@@ -6,19 +6,20 @@
 
 The prupose of this project is to host static pages to SPOT the differences in images
 
-## Image Compare
+## Practical Exercise 1 (EMAIL TESTING)
 
-- Image Test 1: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test1.html)
-- Image Test 2: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test2.html)
-- Image Test 3: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test3.html)
-- Image Test 4: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test4.html)
+- Email Proof 1: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof1.html)
+- Email Proof 2: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof2.html)
+- Email Proof 3: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof3.html)
+- Email Proof 4: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof4.html)
+  
+## Practical Exercise 2 (SPOT DIFFERENCES)
 
-## Proof
+- Image 1: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test1.html)
+- Image 2: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test2.html)
+- Image 3: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test3.html)
+- Image 4: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test4.html)
 
-- Proof 1: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof1.html)
-- Proof 2: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof2.html)
-- Proof 3: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof3.html)
-- Proof 4: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof4.html)
 
 ## Checklist
 
