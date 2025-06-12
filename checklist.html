@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Checklist with Item Numbers & Add Item</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #aaa;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    select {
+      padding: 5px;
+    }
+
+    .status-pass {
+      background-color: #d4edda;
+    }
+
+    .status-fail {
+      background-color: #f8d7da;
+    }
+
+    .status-na {
+      background-color: #e2e3e5;
+    }
+
+    .status-blocked {
+      background-color: #fff3cd;
+    }
+
+    .results {
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    #addItemContainer {
+      margin-bottom: 20px;
+    }
+
+    #newItemInput {
+      padding: 8px;
+      width: 300px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Checklist Execution</h1>
+
+  <div id="addItemContainer">
+    <input type="text" id="newItemInput" placeholder="Enter new checklist item" />
+    <button onclick="addNewItem()">Add Item</button>
+  </div>
+
+  <table id="checklist">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Item</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Link Verification:All hyperlinks are functional (no broken or incorrect links).</td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="">-- Select --</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="na">N/A</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Link Verification:Urls are well formed, using href attributes</td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="">-- Select --</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="na">N/A</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Content Verification: Spelling and grammar are correct.</td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="">-- Select --</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="na">N/A</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </td>
+      </tr>
+
+      <tr>
+        <td>4</td>
+        <td>Content Verification: Content matches the provided creatives</td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="">-- Select --</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="na">N/A</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Image Verification:All images load properly (no broken images). </td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="">-- Select --</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="na">N/A</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Image Verification: All images must have descriptive Alt text</td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="">-- Select --</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="na">N/A</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Image Verification: Images are optimized for size (< 1mb)</td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="">-- Select --</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="na">N/A</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Rendering: Email is fully responsive </td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="">-- Select --</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="na">N/A</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </td>
+      </tr>
+
+            <tr>
+        <td>9</td>
+        <td>Rendering: Fonts and brand colors render consistently as per creatives </td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="">-- Select --</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+            <option value="na">N/A</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="results" id="results">
+    Execution: 0% <br />
+    Pass: 0% | Fail: 0% | N/A: 0% | Blocked: 0%
+  </div>
+
+  <button onclick="downloadPDF()">Download PDF</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    function updateStatus(selectElem) {
+      const row = selectElem.parentElement.parentElement;
+      row.className = selectElem.value ? "status-" + selectElem.value : "";
+      calculatePercentages();
+    }
+
+    function calculatePercentages() {
+      const selects = document.querySelectorAll("#checklist select");
+      const totalItems = selects.length;
+      let count = {
+        pass: 0,
+        fail: 0,
+        na: 0,
+        blocked: 0,
+        selected: 0,
+      };
+
+      selects.forEach(select => {
+        const val = select.value;
+        if (val) {
+          count.selected++;
+          if (val === "pass") count.pass++;
+          else if (val === "fail") count.fail++;
+          else if (val === "na") count.na++;
+          else if (val === "blocked") count.blocked++;
+        }
+      });
+
+      const executedCount = count.pass + count.fail;
+      const executionPercent = totalItems ? Math.round((executedCount / totalItems) * 100) : 0;
+      const passPercent = totalItems ? Math.round((count.pass / totalItems) * 100) : 0;
+      const failPercent = totalItems ? Math.round((count.fail / totalItems) * 100) : 0;
+      const naPercent = totalItems ? Math.round((count.na / totalItems) * 100) : 0;
+      const blockedPercent = totalItems ? Math.round((count.blocked / totalItems) * 100) : 0;
+
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = `
+        Execution: ${executionPercent}% <br />
+        Pass: ${passPercent}% | Fail: ${failPercent}% | N/A: ${naPercent}% | Blocked: ${blockedPercent}%
+      `;
+
+      return {
+        executionPercent,
+        passPercent,
+        failPercent,
+        naPercent,
+        blockedPercent
+      };
+    }
+
+    function addNewItem() {
+      const input = document.getElementById("newItemInput");
+      const text = input.value.trim();
+      if (!text) {
+        alert("Please enter a checklist item.");
+        return;
+      }
+
+      const tbody = document.querySelector("#checklist tbody");
+      const newRow = document.createElement("tr");
+
+      // No. cell
+      const tdNo = document.createElement("td");
+      tdNo.textContent = tbody.children.length + 1;
+
+      // Item cell
+      const tdItem = document.createElement("td");
+      tdItem.textContent = text;
+
+      // Status cell
+      const tdStatus = document.createElement("td");
+      const select = document.createElement("select");
+      select.innerHTML = `
+        <option value="">-- Select --</option>
+        <option value="pass">Pass</option>
+        <option value="fail">Fail</option>
+        <option value="na">N/A</option>
+        <option value="blocked">Blocked</option>
+      `;
+      select.onchange = function () {
+        updateStatus(this);
+      };
+      tdStatus.appendChild(select);
+
+      newRow.appendChild(tdNo);
+      newRow.appendChild(tdItem);
+      newRow.appendChild(tdStatus);
+
+      tbody.appendChild(newRow);
+
+      input.value = "";
+      calculatePercentages();
+    }
+
+    // Update all item numbers (useful if we ever remove items or reorder)
+    function updateItemNumbers() {
+      const rows = document.querySelectorAll("#checklist tbody tr");
+      rows.forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+      });
+    }
+
+    function downloadPDF() {
+      const doc = new jsPDF();
+      doc.setFontSize(18);
+      doc.text("Checklist Execution Report", 14, 22);
+
+      doc.setFontSize(12);
+      let y = 35;
+
+      const rows = document.querySelectorAll("#checklist tbody tr");
+      rows.forEach((row, idx) => {
+        const no = row.cells[0].textContent;
+        const itemText = row.cells[1].textContent;
+        const selectElem = row.cells[2].querySelector("select");
+        const status = selectElem.value || "Not Selected";
+
+        doc.text(`${no}. ${itemText}`, 14, y);
+        doc.text(`Status: ${status.charAt(0).toUpperCase() + status.slice(1)}`, 150, y);
+        y += 10;
+
+        if (y > 280) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      const {
+        executionPercent,
+        passPercent,
+        failPercent,
+        naPercent,
+        blockedPercent
+      } = calculatePercentages();
+
+      y += 10;
+      doc.setFontSize(14);
+      doc.text(`Execution: ${executionPercent}%`, 14, y);
+      y += 8;
+      doc.setFontSize(12);
+      doc.text(`Pass: ${passPercent}% | Fail: ${failPercent}% | N/A: ${naPercent}% | Blocked: ${blockedPercent}%`, 14, y);
+
+      doc.save("checklist_execution_report.pdf");
+    }
+
+    // Initialize percentages on page load
+    calculatePercentages();
+  </script>
+
+</body>
+
+</html>

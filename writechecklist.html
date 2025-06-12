@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Multiple Checklists with Summary & PDF</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  .checklist-container {
+    border: 1px solid #aaa;
+    padding: 15px;
+    margin-bottom: 30px;
+    border-radius: 6px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+  }
+  table, th, td {
+    border: 1px solid #aaa;
+  }
+  th, td {
+    padding: 8px;
+    text-align: left;
+  }
+  select {
+    padding: 5px;
+  }
+  .status-pass { background-color: #d4edda; }
+  .status-fail { background-color: #f8d7da; }
+  .status-na { background-color: #e2e3e5; }
+  .status-blocked { background-color: #fff3cd; }
+  .results {
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  button {
+    padding: 8px 12px;
+    font-size: 1em;
+    cursor: pointer;
+    margin: 5px 0;
+  }
+  input[type="text"] {
+    padding: 6px;
+    font-size: 1em;
+    width: 280px;
+  }
+  h2 {
+    margin-top: 0;
+  }
+  #overallSummary {
+    border: 2px solid #444;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    background: #f4f4f4;
+  }
+</style>
+</head>
+<body>
+
+  <h1>Multiple Checklists Execution</h1>
+  <button onclick="addNewChecklist()">+ Add New Checklist</button>
+
+  <div id="allChecklists"></div>
+
+  <div id="overallSummary" class="results">
+    <h2>Overall Summary</h2>
+    <div id="overallResults">
+      Execution: 0% <br />
+      Pass: 0% | Fail: 0% | N/A: 0% | Blocked: 0%
+    </div>
+  </div>
+
+  <button onclick="downloadPDF()">Download All Checklists PDF</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  const { jsPDF } = window.jspdf;
+  let checklistCount = 0;
+
+  // Store checklist data structure: { id, name, elementRefs }
+  const checklists = [];
+
+  // Create a new checklist container with inputs and table
+  function createChecklist(name) {
+    checklistCount++;
+    const checklistId = "checklist-" + checklistCount;
+
+    // Create container div
+    const container = document.createElement("div");
+    container.className = "checklist-container";
+    container.id = checklistId;
+
+    // Heading
+    const heading = document.createElement("h2");
+    heading.textContent = name;
+    container.appendChild(heading);
+
+    // Input to add new item
+    const addItemDiv = document.createElement("div");
+    addItemDiv.innerHTML = `
+      <input type="text" placeholder="Enter new checklist item" />
+      <button>Add Item</button>
+    `;
+    container.appendChild(addItemDiv);
+
+    // Create table
+    const table = document.createElement("table");
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Item</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `;
+    container.appendChild(table);
+
+    // Result display per checklist
+    const resultsDiv = document.createElement("div");
+    resultsDiv.className = "results";
+    resultsDiv.innerHTML = `
+      Execution: 0% <br />
+      Pass: 0% | Fail: 0% | N/A: 0% | Blocked: 0%
+    `;
+    container.appendChild(resultsDiv);
+
+    // Add to DOM
+    document.getElementById("allChecklists").appendChild(container);
+
+    // Store references
+    checklists.push({
+      id: checklistId,
+      name,
+      container,
+      input: addItemDiv.querySelector("input"),
+      addButton: addItemDiv.querySelector("button"),
+      table,
+      tbody: table.querySelector("tbody"),
+      resultsDiv
+    });
+
+    // Setup Add Item button click
+    const checklistObj = checklists[checklists.length -1];
+    checklistObj.addButton.onclick = () => {
+      const text = checklistObj.input.value.trim();
+      if (!text) {
+        alert("Please enter a checklist item.");
+        return;
+      }
+      addItemToChecklist(checklistObj, text);
+      checklistObj.input.value = "";
+      calculateAllPercentages();
+    };
+
+    // Start with no items - or you can add initial default items here if you want
+  }
+
+  // Add item row to a specific checklist
+  function addItemToChecklist(checklistObj, itemText) {
+    const tr = document.createElement("tr");
+
+    // Number cell
+    const tdNo = document.createElement("td");
+    tdNo.textContent = checklistObj.tbody.children.length + 1;
+
+    // Item cell
+    const tdItem = document.createElement("td");
+    tdItem.textContent = itemText;
+
+    // Status cell with dropdown
+    const tdStatus = document.createElement("td");
+    const select = document.createElement("select");
+    select.innerHTML = `
+      <option value="">-- Select --</option>
+      <option value="pass">Pass</option>
+      <option value="fail">Fail</option>
+      <option value="na">N/A</option>
+      <option value="blocked">Blocked</option>
+    `;
+    select.onchange = () => {
+      updateRowStatusClass(tr, select.value);
+      calculateAllPercentages();
+    };
+    tdStatus.appendChild(select);
+
+    tr.appendChild(tdNo);
+    tr.appendChild(tdItem);
+    tr.appendChild(tdStatus);
+
+    checklistObj.tbody.appendChild(tr);
+  }
+
+  // Add new checklist via prompt
+  function addNewChecklist() {
+    const name = prompt("Enter new checklist name:");
+    if (!name || !name.trim()) {
+      alert("Checklist name cannot be empty.");
+      return;
+    }
+    createChecklist(name.trim());
+  }
+
+  // Update row class based on status for coloring
+  function updateRowStatusClass(row, status) {
+    row.className = status ? "status-" + status : "";
+  }
+
+  // Calculate percentages for one checklist object
+  function calculatePercentages(checklistObj) {
+    const selects = checklistObj.tbody.querySelectorAll("select");
+    const totalItems = selects.length;
+    let count = { pass:0, fail:0, na:0, blocked:0 };
+
+    selects.forEach(s => {
+      const val = s.value;
+      if(val) {
+        if(val === "pass") count.pass++;
+        else if(val === "fail") count.fail++;
+        else if(val === "na") count.na++;
+        else if(val === "blocked") count.blocked++;
+      }
+    });
+
+    // Execution counts Pass+Fail only as executed items
+    const executed = count.pass + count.fail;
+
+    const executionPercent = totalItems ? Math.round((executed / totalItems) * 100) : 0;
+    const passPercent = totalItems ? Math.round((count.pass / totalItems) * 100) : 0;
+    const failPercent = totalItems ? Math.round((count.fail / totalItems) * 100) : 0;
+    const naPercent = totalItems ? Math.round((count.na / totalItems) * 100) : 0;
+    const blockedPercent = totalItems ? Math.round((count.blocked / totalItems) * 100) : 0;
+
+    checklistObj.resultsDiv.innerHTML = `
+      Execution: ${executionPercent}% <br />
+      Pass: ${passPercent}% | Fail: ${failPercent}% | N/A: ${naPercent}% | Blocked: ${blockedPercent}%
+    `;
+
+    return {
+      executionPercent, passPercent, failPercent, naPercent, blockedPercent,
+      totalItems, executed, count
+    };
+  }
+
+  // Calculate percentages for all checklists and update overall summary
+  function calculateAllPercentages() {
+    let grandTotal = 0;
+    let grandExecuted = 0;
+    let grandCount = { pass:0, fail:0, na:0, blocked:0 };
+
+    checklists.forEach(cl => {
+      const res = calculatePercentages(cl);
+      grandTotal += res.totalItems;
+      grandExecuted += res.executed;
+      grandCount.pass += res.count.pass;
+      grandCount.fail += res.count.fail;
+      grandCount.na += res.count.na;
+      grandCount.blocked += res.count.blocked;
+    });
+
+    const overallExecution = grandTotal ? Math.round((grandExecuted / grandTotal) * 100) : 0;
+    const overallPass = grandTotal ? Math.round((grandCount.pass / grandTotal) * 100) : 0;
+    const overallFail = grandTotal ? Math.round((grandCount.fail / grandTotal) * 100) : 0;
+    const overallNA = grandTotal ? Math.round((grandCount.na / grandTotal) * 100) : 0;
+    const overallBlocked = grandTotal ? Math.round((grandCount.blocked / grandTotal) * 100) : 0;
+
+    const overallDiv = document.getElementById("overallResults");
+    overallDiv.innerHTML = `
+      Execution: ${overallExecution}% <br />
+      Pass: ${overallPass}% | Fail: ${overallFail}% | N/A: ${overallNA}% | Blocked: ${overallBlocked}%
+    `;
+  }
+
+  // Download PDF of all checklists + overall summary
+  function downloadPDF() {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Checklist Execution Report", 14, 20);
+    let y = 35;
+
+    checklists.forEach((cl, index) => {
+      doc.setFontSize(14);
+      doc.text(`${index + 1}. ${cl.name}`, 14, y);
+      y += 10;
+
+      // Table header
+      doc.setFontSize(12);
+      doc.text("No.", 14, y);
+      doc.text("Item", 30, y);
+      doc.text("Status", 160, y);
+      y += 8;
+
+      const rows = cl.tbody.querySelectorAll("tr");
+      rows.forEach((row) => {
+        const no = row.cells[0].textContent;
+        const item = row.cells[1].textContent;
+        const select = row.cells[2].querySelector("select");
+        const status = select.value || "Not Selected";
+
+        if(y > 280) {
+          doc.addPage();
+          y = 20;
+        }
+
+        doc.text(no + ".", 14, y);
+        doc.text(item, 30, y);
+        doc.text(status.charAt(0).toUpperCase() + status.slice(1), 160, y);
+        y += 8;
+      });
+
+      // Checklist percentages
+      const res = calculatePercentages(cl);
+      y += 6;
+      doc.setFontSize(12);
+      doc.text(`Execution: ${res.executionPercent}%`, 14, y);
+      y += 7;
+      doc.text(`Pass: ${res.passPercent}% | Fail: ${res.failPercent}% | N/A: ${res.naPercent}% | Blocked: ${res.blockedPercent}%`, 14, y);
+      y += 15;
+
+      if(y > 280) {
+        doc.addPage();
+        y = 20;
+      }
+    });
+
+    // Overall summary
+    const overallDiv = document.getElementById("overallResults");
+    y += 10;
+    doc.setFontSize(16);
+    doc.text("Overall Summary", 14, y);
+    y += 10;
+    doc.setFontSize(12);
+    doc.text(overallDiv.textContent.replace(/\n/g, " "), 14, y);
+
+    doc.save("all_checklists_report.pdf");
+  }
+
+  // Initial setup: create one checklist by default for demo
+  createChecklist("Default Checklist");
+  calculateAllPercentages();
+
+</script>
+</body>
+</html>
