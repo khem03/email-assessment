@@ -14,7 +14,7 @@
 ## Creatives For Exercise 1
 
 - Email Proof 1 Desktop: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](EmailProof1Desktop.html)
-- Email Proof 2 Mobile: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](EmailProof1Mobile.html)
+- Email Proof 1 Mobile: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](EmailProof1Mobile.html)
 
   
 ## Practical Exercise 2 (SPOT DIFFERENCES)
