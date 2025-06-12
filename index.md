@@ -3,7 +3,7 @@
 ![Project Logo](./rapp.jpg)
 
 
-## Practical Exercise 1 (EMAIL TESTING)
+## Practical Exercise 1 (Email Testing)
 
 - Email Proof 1: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof1.html)
 - Email Proof 2: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](proof2.html)
@@ -23,7 +23,7 @@
 - Write Checklist Exercise: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](writechecklist.html)
 
   
-## Practical Exercise 2 (SPOT IMAGES DIFFERENCES)
+## Practical Exercise 2 (Spot Image Differences)
 
 - Image 1: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test1.html)
 - Image 2: [![Click Here](https://img.shields.io/badge/Visit-Website-blue)](test2.html)
